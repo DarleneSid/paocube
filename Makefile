@@ -1,14 +1,12 @@
-NAME			=	cube3d
-
-LIBFT			=	libft.a
+NAME	=	cube3d
 
 DIR_SRCS		=	srcs
 
+DIR_SRCS_B		=	bonus
+
 DIR_OBJS		=	objs
 
-SRCS_NAMES		=	main.c \
-
-
+SRCS_NAMES		=	main.c
 
 OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
 
@@ -18,44 +16,62 @@ SRCS			=	$(addprefix $(DIR_SRCS)/,$(SRCS_NAMES))
 
 OBJS			=	$(addprefix $(DIR_OBJS)/,$(OBJS_NAMES))
 
-INC				=	-Iincludes -Ilibft/includes
+INC				=	-Iincludes
 
-# LIB				=	-lreadline -lm -Llibft -lft
+LIB				=	-Llibft -lft -Lft_printf -lftprintf
+
+LIBFT			=	libft.a
+
+PRINTF			=	libftprintf.a
 
 CC				=	cc
 
-CDFLAGS 		= -MMD -MP
+CDFLAGS 		=	-MMD -MP
 
-CFLAGS			=	-g3 -Wall -Werror -Wextra
+MLX_FLAGS		=	-lm -lmlx -lXext -lX11
 
-# MAKEFLAGS		=	--no-print-directory
+CFLAGS			=	-Wall -Werror -Wextra
 
 all:	${NAME}
 
-$(NAME): $(DIR_OBJS) $(OBJS) 
-	make -C libft
-	$(CC) -g3 ${INC} $(OBJS) $(LIB) -o $(NAME)
-	@echo "\033[31;5mcube3d\033[0m"
-
-$(OBJS) : $(DIR_OBJS)/%.o : $(DIR_SRCS)/%.c
-	$(CC) -g3 $(CDFLAGS) $(INC) -c $< -o $@ 
+bonus:	${BONUS}
 
 $(DIR_OBJS):
 	mkdir -p $(DIR_OBJS)
-	mkdir -p objs/parsing
-	mkdir -p objs/exec
+
+$(OBJS) : $(DIR_OBJS)/%.o : $(DIR_SRCS)/%.c
+	$(CC) -g3 $(CFLAGS) $(CDFLAGS) $(INC) -c $< -o $@ 
+
+$(OBJS_B) : $(DIR_OBJS)/%.o : $(DIR_SRCS_B)/%.c
+	$(CC) -g3 $(CFLAGS) $(CDFLAGS) $(INC) -c $< -o $@ 
+
+$(NAME): $(DIR_OBJS) $(OBJS) 
+	make -C libft
+	make -C ft_printf
+	make -C mlx
+	$(CC) -g3 ${INC} $(OBJS) $(LIB)  mlx/libmlx.a mlx/libmlx_Linux.a -L. -lXext -L. -lX11 -o $(NAME)
+	@echo "\033[31;5mcube3d\033[0m"
+
+
+norm:
+	norminette srcs/ bonus/ includes/
 
 clean:
+	make clean -C mlx
 	make clean -C libft
+	make clean -C ft_printf
 	rm -rf ${DIR_OBJS}
 
 fclean:	clean
 	make fclean -C libft
+	make fclean -C ft_printf
 	rm -rf ${LIBFT}
 	rm -rf ${NAME}
+	rm -rf ${BONUS}
 
 re:	fclean all
 
 -include $(DEPS)
 
 .PHONY:	all clean fclean re
+
