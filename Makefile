@@ -2,8 +2,6 @@ NAME	=	cube3d
 
 DIR_SRCS		=	srcs
 
-DIR_SRCS_B		=	bonus
-
 DIR_OBJS		=	objs
 
 SRCS_NAMES		=	main.c
