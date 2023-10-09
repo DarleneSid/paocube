@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:36:40 by pferreir          #+#    #+#             */
-/*   Updated: 2023/10/06 00:17:05 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/09 23:21:27 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,11 @@
 # include <X11/X.h>
 # include <stdio.h>
 # include <stdbool.h>
+
+typedef struct t_data
+{
+	char	**map;
+
+}	t_data;
 
 #endif
