@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/10 23:43:43 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/13 01:11:30 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,28 +28,28 @@ reach line with only 1 n spaces
 
 */
 
-int	check_valid_chars(char c)
+
+int	first_line(char *s)
 {
 	int	i;
-
+	
 	i = 0;
-	while (c)
+	while(s[i])
 	{
-		if (c == '1')
-			return (1);
-		else if (c == ' ')
-			return (1);
-		else if (c == 'N')
-			return (1);
-		else if (c == 'S')
-			return (1);
-		else if (c == 'E')
-			return (1);
-		else if (c == 'W')
-			return (1);
+		if (s[i] == ' ' || s[i] == '1')
+			i++;
 		else
 			return (0);
 	}
+	if (s[i] == '\n')
+		return (1);
+	return (0);
+}
+
+int	check_valid_chars(char c)
+{
+	if (c == '1' || c == '0' || c == ' ' || c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		return (1);
 	return (0);
 }
 
@@ -60,17 +60,25 @@ int	height_of_map(int fd)
 	char		*tmp;
 
 	i = 0;
-	c = 0;
-	while (1)
+	tmp = get_next_line(fd);
+	if (!tmp)
+		return (-1);
+	while (tmp)
 	{
-		tmp = get_next_line(fd);
-		if (!tmp)
-			break ;
+		c = 0;
 		while (tmp[c] && check_valid_chars(tmp[c]))
 			c++;
 		if (tmp[c] == '\n')
 			i++;
+		if (tmp[c] == '\0')
+		{
+			free(tmp);
+			break ;
+		}
 		free(tmp);
+		tmp = get_next_line(fd);
+		if (!tmp)
+			break ;
 	}
 	return (i);
 }
@@ -89,42 +97,64 @@ int	height_of_map(int fd)
 
 //when i reach line with only 1 and spaces
 
-// void	fill_map(t_data *data, int fd)
-// {
-// 	int			i;
-// 	char		**str;
-// 	char		*tmp;
+int	fill_map(t_data *data, int fd)
+{
+	int			i;
+	char		**str;
+	char		*tmp;
 
-// 	i = 0;
-// 	str = ft_calloc(sizeof(char *), height_of_map(fd) + 1);
-// 	if (!str)
-// 		return (ft_printf("Malloc failed"), close(fd), exit(0), 1);
-// 	while (1)
-// 	{
-// 		tmp = get_next_line(fd);
-// 		if (!tmp)
-// 			break ;
-// 		str[i] = tmp;
-// 		free(tmp);
-// 		i++;
-// 	}
-// 	free(tmp);
-// 	data->map = str;
-// 	if (!data->map)
-// 		return (free(str), close(fd), exit(0), 1);
-// 	free(str);
-// }
+	i = 0;
+	printf("im here\n");
+	str = ft_calloc(sizeof(char *), height_of_map(fd) + 1);
+	if (!str)
+		return (ft_printf("Malloc failed"), close(fd), exit(0), 1);
+	while (1)
+	{
+		printf("im haaaaaere\n");
+		tmp = get_next_line(fd);
+		if (!tmp)
+			break ;
+		printf("im herrrrrre\n");
+		if (first_line(tmp))
+		{
+			printf("here\n");
+			while (tmp)
+			{
+				str[i] = tmp;
+				free(tmp);
+				i++;
+				tmp = get_next_line(fd);
+			}
+		}
+		printf("here\n");
+		free(tmp);
+	}
+	free(tmp);
+	data->map = str;
+	if (!data->map)
+		return (free(str), close(fd), exit(0), 1);
+	free(str);
+	return (0);
+}
 
-int	parsing(char *file)
+int	parsing(t_data *data, char *file)
 {
 	int	fd;
 
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		(ft_printf("Not valid fd!\n"), exit(0));
-	// fill_map(data, fd);
 	printf("lines: %d\n", height_of_map(fd));
+	fill_map(data, fd);
 	close(fd);
+	int i;
+
+	i = 0;
+	while (data->map[i])
+	{
+		printf("%s\n", data->map[i]);
+		i++;
+	}
 	return (0);
 // 	if (!*data->map)
 // 		return (exit_safely(data->map, 1), 1);

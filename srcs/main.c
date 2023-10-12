@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 00:19:45 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/10 23:40:42 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/13 00:27:36 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,6 @@ int	main(int ac, char **av)
 		return (ft_printf("Wrong amount of arguments!\n"), 1);
 	if (ft_strncmp(&av[1][ft_strlen(av[1]) - 4], ".cub\0", 5))
 		return (ft_printf("It has to end with .cub!\n"), 1);
-	parsing(av[1]);
+	parsing(&data, av[1]);
 	return (0);
 }

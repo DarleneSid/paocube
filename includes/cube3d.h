@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:36:40 by pferreir          #+#    #+#             */
-/*   Updated: 2023/10/10 23:41:01 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/13 00:23:20 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ typedef struct t_data
 
 }	t_data;
 
-int	parsing(char *file);
+int	parsing(t_data *data, char *file);
 
 #endif
